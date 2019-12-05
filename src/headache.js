@@ -38,19 +38,22 @@ function data() {
 t3.textContent = data();
 
 function curry(f) { // curry(f) выполняет каррирование
-    console.log(f);
-    return function(a) {
-        console.log(a);
-        return function(b) {
-            console.log(b);
-            return f(a, b);
+    console.log(f); // ƒ sum(a, b, c) { return '' + a + b + c; }
+    return function (a) {
+        console.log(a); // 2
+        return function (b) {
+            console.log(b); // 3
+            return function (c) {
+                console.log(c); //
+                return f(a, b, c);
+            };
         };
     };
 }
 // использование
-function sum(a, b) {
-    return a + b;
+function sum(a, b, c) {
+    return '' + a + b + c;
 }
 const carriedSum = curry(sum);
 
-t4.textContent = carriedSum(1)(2); // 3
+t4.textContent = carriedSum(2)(3)(); // 23undefined
