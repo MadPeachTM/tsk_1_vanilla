@@ -28,3 +28,8 @@ console.log(array1.reduce(reducer));
 console.log(array1.reduce(reducer, 5));
 // expected output: 15
 console.log(array1);
+f.call(null);
+
+function f() {
+  t6.textContent = this + '';
+}
