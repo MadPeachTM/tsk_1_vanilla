@@ -50,6 +50,7 @@ function curry(f) { // curry(f) выполняет каррирование
         };
     };
 }
+
 // использование
 function sum(a, b, c) {
     return '' + a + b + c;
