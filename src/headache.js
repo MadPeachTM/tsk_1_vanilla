@@ -2,17 +2,26 @@
 /* eslint-disable require-jsdoc */
 /* eslint-disable indent */
 'use strict';
+// alt+shift+f => format document
+
 const t1 = document.querySelector('.t1');
 const t2 = document.querySelector('.t2');
 const t3 = document.querySelector('.t3');
 const t4 = document.querySelector('.t4');
 // const t5 = document.querySelector('.t5');
-
+const t11 = document.querySelector('.t11');
+const t12 = document.querySelector('.t12');
+const t13 = document.querySelector('.t13');
+const t14 = document.querySelector('.t14');
+const t15 = document.querySelector('.t15');
 const func1 = (...args) => {
   return args.map(num => {
     return num;
   });
 };
+const num = 457457556546;
+const carriedSum = curry(sum);
+
 t1.textContent =
   t1.textContent + 'func1: ' + func1(1, 2, 3, 4, 5, 6, 7, 8) + ' ';
 function func2(...args) {
@@ -21,8 +30,6 @@ function func2(...args) {
 }
 t1.textContent =
   t1.textContent + 'func2: ' + func2(1, 2, 3, 4, 5, 6, 7, 8) + ' ';
-
-const num = 457457556546;
 
 function colonOdd(num) {
   const str = num.toString();
@@ -68,6 +75,183 @@ function curry(f) {
 function sum(a, b, c) {
   return '' + a + b + c;
 }
-const carriedSum = curry(sum);
 
 t4.textContent = carriedSum(2)(3)(); // 23undefined
+
+function Parent(name, age) {
+  this.name = name;
+  this.age = age;
+  this.nameAge = '';
+  this.setNameJob = function(name, age) {
+    this.nameAge = name + ', ' + age;
+  };
+}
+function Child(job, name, age) {
+  Parent.call(this, name, age);
+  this.job = job;
+  this.born = 2019 - age;
+}
+// Child.prototype=Parent.prototype;
+// console.log(Parent.prototype);
+// console.log(Child.prototype);
+const bob = new Child('Doctor', 'Bob', 33);
+console.log('bob');
+bob.setNameJob(bob.name, bob.age);
+console.log(bob);
+console.log(Object.entries(bob));
+Object.entries(bob).map(
+  element =>
+    (t11.textContent = t11.textContent + element[element.length - 1] + ', ')
+);
+
+class CarAge {
+  _age = 0;
+  constructor(value) {
+    this.age = value;
+  }
+  set age(age) {
+    this._age = age;
+  }
+  get age() {
+    return this._age;
+  }
+  /*
+  washed() {
+    return true;
+  }
+  тоже что в функциях-классах:
+  CarAge.prototype.washed = function() { return true };
+  */
+}
+
+class CarType extends CarAge {
+  _wheels = 4;
+  _type = '';
+  constructor(value, type) {
+    // super = __proto__, super юзам только в конструкторе, вне его просто this
+    super(value);
+    this._type = type;
+  }
+  // set age(value) {
+  //   this._type = value;
+  // }
+  // get age() {
+  //   return this._type;
+  // }
+  get fullData() {
+    return this.concatData();
+  }
+  concatData() {
+    return (
+      'type: ' +
+      this._type +
+      ', ' +
+      'age: ' +
+      this._age +
+      ', ' +
+      'wheels: ' +
+      this._wheels
+    );
+  }
+}
+let myCar = new CarType(12, 'jeep');
+console.log(myCar);
+t12.textContent = myCar.fullData;
+
+class Article {
+  constructor(title, date) {
+    this.title = title;
+    this.date = date;
+  }
+  static createTodays() {
+    // помним, что this = Article
+    return new this('Сегодняшний дайджест', new Date());
+  }
+}
+let article = Article.createTodays();
+let isstaticarticle = new Article(1, 2);
+console.log(isstaticarticle);
+
+function Name(name) {
+  this.name = name;
+}
+Name.staticMethod = function() {};
+let ivan = new Name('Ivan');
+console.log(ivan);
+/*
+Экспорт:
+
+Перед объявлением класса/функции/…:
+export [default] class/function/variable ...
+
+Отдельный экспорт:
+export {x [as y], ...}.
+
+Реэкспорт:
+export {x [as y], ...} from "module"
+export * from "module" (не реэкспортирует export default).
+export {default [as y]} from "module" (реэкспортирует только export default).
+
+Импорт:
+
+Именованные экспорты из модуля:
+import {x [as y], ...} from "module"
+
+Экспорт по умолчанию:
+import x from "module"
+import {default as x} from "module"
+
+Всё сразу:
+import * as obj from "module"
+
+Только подключить модуль (его код запустится), но не присваивать его переменной:
+import "module"
+
+Динамический мипорт/экспорт:
+
+export function hi() {
+  alert(`Привет`);
+}
+
+export function bye() {
+  alert(`Пока`);
+}
+...
+let {hi, bye} = await import('./say.js');
+
+export default function() {
+  alert("Module loaded (export default)!");
+}
+...
+let obj = await import('./say.js');
+let say = obj.default;
+*/
+
+let objIter = {
+  start: 0,
+  today: 2
+};
+objIter[Symbol.iterator] = function() {
+  return {
+    current: this.start,
+    last: this.today,
+    next() {
+      if (this.current <= this.last) {
+        return { done: false, value: this.current++ };
+      } else {
+        return { done: true };
+      }
+    }
+  };
+};
+for (let el of objIter) {
+  console.log(el);
+}
+let a = 0;
+let b = 1;
+(function() {
+  a = 10;
+  b = 11;
+  let func = new Function('console.log(a,b)');
+  func();
+})();
