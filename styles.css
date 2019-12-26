@@ -46,3 +46,33 @@ li {
 .fetchGoesHere td{
   width: auto;
 }
+
+p {
+  width: auto;
+  min-width: 100px;
+  max-width: 200px;
+}
+p:empty:not(:focus)::before {
+  content: attr(data-placeholder);
+}
+section {
+  position: absolute;
+}
+#first-section {
+  -webkit-transition: all 0.2s ease-in-out 0s;
+  -moz-transition: all 0.2s ease-in-out 0s;
+  -ms-transition: all 0.2s ease-in-out 0s;
+  transition: all 0.2s ease-in-out 0s;
+
+  opacity: 1;
+  visibility: visible;
+}
+#second-section {
+  -webkit-transition: all 0.2s ease-in-out 0s;
+  -moz-transition: all 0.2s ease-in-out 0s;
+  -ms-transition: all 0.2s ease-in-out 0s;
+  transition: all 0.2s ease-in-out 0s;
+
+  opacity: 0;
+  visibility: hidden;
+}

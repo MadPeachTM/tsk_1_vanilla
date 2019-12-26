@@ -128,16 +128,10 @@ class CarType extends CarAge {
   _wheels = 4;
   _type = '';
   constructor(value, type) {
-    // super = __proto__, super юзам только в конструкторе, вне его просто this
+    // super = __proto__, super юзаем только в конструкторе, вне его просто this
     super(value);
     this._type = type;
   }
-  // set age(value) {
-  //   this._type = value;
-  // }
-  // get age() {
-  //   return this._type;
-  // }
   get fullData() {
     return this.concatData();
   }
@@ -255,3 +249,13 @@ let b = 1;
   let func = new Function('console.log(a,b)');
   func();
 })();
+
+function Vehicle(mark) {
+  this.mark = mark || 'Audi';
+}
+function Car(type, mark) {
+  this.type = type || 'car';
+  Vehicle.call(this, mark);
+}
+let newCar = new Car('Jeep', 'Lexus');
+console.log(newCar);

@@ -1,180 +1,178 @@
-// /* eslint-disable indent */
-// /* eslint-disable max-len */
-// /* eslint-disable require-jsdoc */
-// 'use strict';
+/* eslint-disable indent */
+/* eslint-disable max-len */
+/* eslint-disable require-jsdoc */
+'use strict';
 
-// const CLASS_TABLE_ELEMENT = document.querySelector('.table');
-// const CREATE_TABLE_BUTTON = document.querySelector('.create-table-button');
-// const ADD_ROW_BUTTON = document.querySelector('.add-row-button');
-// const ADD_COLUMN_BUTTON = document.querySelector('.add-column-button');
-// const LETTERS_LIST = Array(
-//   'abcdefghijklmnopqrstuvwxyz'.toUpperCase().split('')
-// )[0];
+const CLASS_TABLE_ELEMENT = document.querySelector('.table');
+const CREATE_TABLE_BUTTON = document.querySelector('.create-table-button');
+const ADD_ROW_BUTTON = document.querySelector('.add-row-button');
+const ADD_COLUMN_BUTTON = document.querySelector('.add-column-button');
+const LETTERS_LIST = Array.from(
+  'abcdefghijklmnopqrstuvwxyz'.toUpperCase().split('')
+);
 // const CREATE_DIV_BUTTON = document.querySelector('.create-div-button');
-// const CLEAR_INPUTS_BUTTON = document.querySelector('.clear-inputs-button');
-// const DIV_FOR_BUTTON = document.querySelector('.divHere');
+const CLEAR_INPUTS_BUTTON = document.querySelector('.clear-inputs-button');
+const DIV_FOR_BUTTON = document.querySelector('.divHere');
+const DOWNLOAD_TABLE_BUTTON = document.querySelector('.download-table-button');
+const SHOW_FIRST_PAGE_BUTTON = document.querySelector('#first-page');
+const SHOW_SECOND_PAGE_BUTTON = document.querySelector('#second-page');
+let ceilName = [];
+let currentLetter = '';
 
-// CREATE_TABLE_BUTTON.addEventListener('click', createTable);
-// ADD_ROW_BUTTON.addEventListener('click', addRow);
-// ADD_COLUMN_BUTTON.addEventListener('click', addColumn);
-// CLEAR_INPUTS_BUTTON.addEventListener('click', clearInputs);
+CREATE_TABLE_BUTTON.addEventListener('click', createTable);
+ADD_ROW_BUTTON.addEventListener('click', addRow);
+ADD_COLUMN_BUTTON.addEventListener('click', addColumn);
+CLEAR_INPUTS_BUTTON.addEventListener('click', clearInputs);
 // CREATE_DIV_BUTTON.addEventListener('click', addDiv);
+DOWNLOAD_TABLE_BUTTON.addEventListener('click', generateexcel);
+SHOW_FIRST_PAGE_BUTTON.addEventListener('click', showFirstPage);
+SHOW_SECOND_PAGE_BUTTON.addEventListener('click', showSecondPage);
 
-// ADD_ROW_BUTTON.disabled = true;
-// ADD_COLUMN_BUTTON.disabled = true;
-// CLEAR_INPUTS_BUTTON.disabled = true;
+ADD_ROW_BUTTON.disabled = true;
+ADD_COLUMN_BUTTON.disabled = true;
+CLEAR_INPUTS_BUTTON.disabled = true;
+DOWNLOAD_TABLE_BUTTON.disabled = true;
 
-// function createTable() {
-//   const table = document.createElement('TABLE');
-//   const row = document.createElement('tr');
-//   table.setAttribute('id', 'myTable');
-//   CLASS_TABLE_ELEMENT.appendChild(table);
-//   document.querySelector('#myTable').appendChild(row);
-//   addColumn();
-//   addColumn();
-//   addRow();
-//   ADD_ROW_BUTTON.disabled = false;
-//   ADD_COLUMN_BUTTON.disabled = false;
-//   CLEAR_INPUTS_BUTTON.disabled = false;
-//   CREATE_TABLE_BUTTON.disabled = true;
-// }
+function createTable() {
+  const table = document.createElement('TABLE');
+  const row = document.createElement('tr');
+  table.setAttribute('id', 'myTable');
+  CLASS_TABLE_ELEMENT.appendChild(table);
+  document.querySelector('#myTable').appendChild(row);
+  addColumn();
+  addColumn();
+  addRow();
+  ADD_ROW_BUTTON.disabled = false;
+  ADD_COLUMN_BUTTON.disabled = false;
+  CLEAR_INPUTS_BUTTON.disabled = false;
+  DOWNLOAD_TABLE_BUTTON.disabled = false;
+  CREATE_TABLE_BUTTON.disabled = true;
+}
 
-// // function justdoit(column) {
-// //   if (NUMBERS_LIST.length > 1) {
-// //     NUMBERS_LIST.shift();
-// //   }
-// //   let blankLetters = '';
-// //   const rowNumber = CLASS_TABLE_ELEMENT.querySelectorAll('tr').length - 1;
-// //   const columnNumber = CLASS_TABLE_ELEMENT.querySelectorAll('tr')[rowNumber].querySelectorAll('td').length;
-// //   if (columnNumber + 1 > LETTERS_LIST.length) {
-// //     for (let i = 0; i < Math.floor(columnNumber / LETTERS_LIST.length); i++) {
-// //       blankLetters += LETTERS_LIST[Math.floor(columnNumber / LETTERS_LIST.length - 1)];
-// //     }
-// //     return function () {
-// //       if (blankLetters.length > 1) {
-// //         return column.textContent = blankLetters.slice(0, Math.floor(columnNumber / LETTERS_LIST.length - 1)) + LETTERS_LIST[columnNumber - LETTERS_LIST.length * blankLetters.length];
-// //       } else {
-// //         return column.textContent = blankLetters + LETTERS_LIST[columnNumber - LETTERS_LIST.length * blankLetters.length];
-// //       }
-// //     }();
-// //   } else {
-// //     return function () {
-// //       if (NUMBERS_LIST[NUMBERS_LIST.length - 1] !== 0) {
-// //         return column.textContent = NUMBERS_LIST[NUMBERS_LIST.length - 1] + LETTERS_LIST[columnNumber];
-// //       } else {
-// //         return column.textContent = LETTERS_LIST[columnNumber];
-// //       }
-// //     }();
-// //   }
-// // }
-// const test = [];
+function generateColumnName(column) {
+  const rowNumber = CLASS_TABLE_ELEMENT.querySelectorAll('tr').length - 1;
+  const columnNumber = CLASS_TABLE_ELEMENT.querySelectorAll('tr')[
+    rowNumber
+  ].querySelectorAll('td').length;
+  if (rowNumber + 1 > 0) {
+    if (columnNumber + 1 > LETTERS_LIST.length) {
+      currentLetter =
+        LETTERS_LIST[
+          columnNumber -
+            LETTERS_LIST.length * Math.floor(columnNumber / LETTERS_LIST.length)
+        ];
+      ceilName[0] = currentLetter;
+      ceilName[Math.floor(columnNumber / LETTERS_LIST.length)] =
+        LETTERS_LIST[LETTERS_LIST.length - 1];
+      return column.setAttribute('data-placeholder', ceilName.join(''));
+    } else {
+      ceilName[Math.floor(columnNumber / LETTERS_LIST.length)] =
+        LETTERS_LIST[columnNumber];
+      return column.setAttribute('data-placeholder', ceilName.join(''));
+    }
+  }
+}
 
-// function justdoit(column) {
-//   const rowNumber = CLASS_TABLE_ELEMENT.querySelectorAll('tr').length - 1;
-//   const columnNumber = CLASS_TABLE_ELEMENT.querySelectorAll('tr')[
-//     rowNumber
-//   ].querySelectorAll('td').length;
-//   if (rowNumber + 1 > 0) {
-//     if (columnNumber + 1 > LETTERS_LIST.length) {
-//       test[Math.floor(columnNumber / LETTERS_LIST.length)] =
-//         LETTERS_LIST[
-//           columnNumber -
-//             LETTERS_LIST.length * Math.floor(columnNumber / LETTERS_LIST.length)
-//         ];
-//       return (column.textContent = test.toString().replace(/,/g, ''));
-//     } else {
-//       test[Math.floor(columnNumber / LETTERS_LIST.length)] =
-//         LETTERS_LIST[columnNumber];
-//       return (column.textContent = test.toString().replace(/,/g, ''));
-//     }
-//   }
-// } // TODO array.toString().replace(/,/g, '')
+function generateRowName(column) {
+  const rowNumber = CLASS_TABLE_ELEMENT.querySelectorAll('tr').length - 1;
+  return column.setAttribute('data-placeholder', rowNumber);
+}
 
-// function justdoit2(column) {
-//   const rowNumber = CLASS_TABLE_ELEMENT.querySelectorAll('tr').length - 1;
-//   return (column.textContent = rowNumber);
-// }
+function addColumn() {
+  for (
+    let i = 0;
+    i < document.querySelector('#myTable').querySelectorAll('tr').length;
+    i++
+  ) {
+    const column = document.createElement('td');
+    const columnText = document.createElement('p');
+    columnText.setAttribute('contenteditable', 'true');
+    // column.appendChild(columnText);
+    if (i === 0) {
+      columnText.textContent = generateColumnName(columnText);
+    }
+    document
+      .querySelector('#myTable')
+      .querySelectorAll('tr')
+      [i].appendChild(column)
+      .appendChild(columnText);
+  }
+  for (
+    let i = 0;
+    i < document.querySelector('#myTable').querySelectorAll('td').length;
+    i++
+  ) {
+    if (
+      document.querySelector('#myTable').querySelectorAll('td')[i]
+        .childElementCount === 0 &&
+      document.querySelector('#myTable').querySelectorAll('td')[i]
+        .textContent === ''
+    ) {
+      const input = document.createElement('p');
+      input.setAttribute('contenteditable', 'true');
+      document
+        .querySelector('#myTable')
+        .querySelectorAll('td')
+        [i].appendChild(input);
+    }
+  }
+}
 
-// function addColumn() {
-//   for (
-//     let i = 0;
-//     i < document.querySelector('#myTable').querySelectorAll('tr').length;
-//     i++
-//   ) {
-//     const column = document.createElement('td');
-//     if (i === 0) {
-//       column.textContent = justdoit(column);
-//     }
-//     document
-//       .querySelector('#myTable')
-//       .querySelectorAll('tr')
-//       [i].appendChild(column);
-//   }
-//   for (
-//     let i = 0;
-//     i < document.querySelector('#myTable').querySelectorAll('td').length;
-//     i++
-//   ) {
-//     if (
-//       document.querySelector('#myTable').querySelectorAll('td')[i]
-//         .childElementCount === 0 &&
-//       document.querySelector('#myTable').querySelectorAll('td')[i]
-//         .textContent === ''
-//     ) {
-//       const input = document.createElement('input');
-//       document
-//         .querySelector('#myTable')
-//         .querySelectorAll('td')
-//         [i].appendChild(input);
-//     }
-//   }
-// }
+function addRow() {
+  const columnsAmount = document
+    .querySelector('#myTable')
+    .querySelectorAll('tr')[
+    document.querySelector('#myTable').querySelectorAll('tr').length - 1
+  ].childElementCount;
+  const row = document.createElement('tr');
+  const rowText = document.createElement('p');
+  rowText.setAttribute('contenteditable', 'true');
+  document.querySelector('#myTable').appendChild(row);
+  for (let i = 0; i < columnsAmount; i++) {
+    const column = document.createElement('td');
+    if (i === 0) {
+      rowText.textContent = generateRowName(rowText);
+      document
+        .querySelector('#myTable')
+        .querySelectorAll('tr')
+        [
+          document.querySelector('#myTable').querySelectorAll('tr').length - 1
+        ].appendChild(column)
+        .appendChild(rowText);
+    }
+    document
+      .querySelector('#myTable')
+      .querySelectorAll('tr')
+      [
+        document.querySelector('#myTable').querySelectorAll('tr').length - 1
+      ].appendChild(column);
+  }
+  for (
+    let i = 0;
+    i < document.querySelector('#myTable').querySelectorAll('td').length;
+    i++
+  ) {
+    if (
+      document.querySelector('#myTable').querySelectorAll('td')[i]
+        .childElementCount === 0 &&
+      document.querySelector('#myTable').querySelectorAll('td')[i]
+        .textContent === ''
+    ) {
+      const input = document.createElement('p');
+      input.setAttribute('contenteditable', 'true');
+      document
+        .querySelector('#myTable')
+        .querySelectorAll('td')
+        [i].appendChild(input);
+    }
+  }
+}
 
-// function addRow() {
-//   const columnsAmount = document
-//     .querySelector('#myTable')
-//     .querySelectorAll('tr')[
-//     document.querySelector('#myTable').querySelectorAll('tr').length - 1
-//   ].childElementCount;
-//   const row = document.createElement('tr');
-//   document.querySelector('#myTable').appendChild(row);
-//   for (let i = 0; i < columnsAmount; i++) {
-//     const column = document.createElement('td');
-//     if (i === 0) {
-//       column.textContent = justdoit2(column);
-//     }
-//     document
-//       .querySelector('#myTable')
-//       .querySelectorAll('tr')
-//       [
-//         document.querySelector('#myTable').querySelectorAll('tr').length - 1
-//       ].appendChild(column);
-//   }
-//   for (
-//     let i = 0;
-//     i < document.querySelector('#myTable').querySelectorAll('td').length;
-//     i++
-//   ) {
-//     if (
-//       document.querySelector('#myTable').querySelectorAll('td')[i]
-//         .childElementCount === 0 &&
-//       document.querySelector('#myTable').querySelectorAll('td')[i]
-//         .textContent === ''
-//     ) {
-//       const input = document.createElement('input');
-//       document
-//         .querySelector('#myTable')
-//         .querySelectorAll('td')
-//         [i].appendChild(input);
-//     }
-//   }
-// }
-
-// function clearInputs() {
-//   document.querySelectorAll('input').forEach(element => {
-//     element.value = '';
-//   });
-// }
+function clearInputs() {
+  document.querySelectorAll('#myTable p').forEach(element => {
+    element.textContent = '';
+  });
+}
 // function addDiv() {
 //   fetch('user.json')
 //     .then(response => response.json())
@@ -189,44 +187,33 @@
 //     });
 // }
 
-// // 2. This code loads the IFrame Player API code asynchronously.
-// var tag = document.createElement('script');
+function generateexcel() {
+  var table = document.getElementById('myTable');
+  var html = table.outerHTML.replace(/ /g, '%20');
+//   window.open( // TODO выяснить как скачивать xlsx файлы (через ноду(?))
+//     'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,' +
+//       encodeURIComponent(html)
+//   );
+    window.open(
+      'data:application/vnd.ms-excel,' + '\uFEFF' + encodeURIComponent(html)
+    );
+}
+const firstPage = document.querySelector('#first-section');
+const secondPage = document.querySelector('#second-section');
+function showFirstPage() {
+    firstPage.style.opacity = 1;
+    secondPage.style.opacity = 0;
+    setTimeout(() => {
+      firstPage.style.visibility = 'visible';
+      secondPage.style.visibility = 'hidden';
+    }, 200);
+}
 
-// tag.src = 'https://www.youtube.com/iframe_api';
-// // TODO tag.src = "https://www.youtube.com/results?search_query=" + search request here;
-// var firstScriptTag = document.getElementsByTagName('script')[0];
-// firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-// // 3. This function creates an <iframe> (and YouTube player)
-// //    after the API code downloads.
-// var player;
-// function onYouTubeIframeAPIReady() {
-//   player = new YT.Player('player', {
-//     height: '360',
-//     width: '640',
-//     videoId: 'M7lc1UVf-VE'
-//     // events: {
-//     //   'onReady': onPlayerReady,
-//     //   'onStateChange': onPlayerStateChange
-//     // }
-//   });
-// }
-
-// // 4. The API will call this function when the video player is ready.
-// // function onPlayerReady(event) {
-// //   event.target.playVideo();
-// // }
-
-// // 5. The API calls this function when the player's state changes.
-// //    The function indicates that when playing a video (state=1),
-// //    the player should play for six seconds and then stop.
-// // var done = false;
-// // function onPlayerStateChange(event) {
-// //   if (event.data == YT.PlayerState.PLAYING && !done) {
-// //     setTimeout(stopVideo, 6000);
-// //     done = true;
-// //   }
-// // }
-// function stopVideo() {
-//   player.stopVideo();
-// }
+function showSecondPage() {
+    firstPage.style.opacity = 0;
+    secondPage.style.opacity = 1;
+    setTimeout(() => {
+      firstPage.style.visibility = 'hidden';
+      secondPage.style.visibility = 'visible';
+    }, 200);
+}
